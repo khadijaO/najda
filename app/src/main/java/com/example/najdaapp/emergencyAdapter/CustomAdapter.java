@@ -12,13 +12,9 @@ import android.widget.Toast;
 
 import com.example.najdaapp.DBSqLite.DatabaseHelper;
 import com.example.najdaapp.R;
-import com.example.najdaapp.contact.ContactModel;
-import com.example.najdaapp.contact.DbHelper;
-import com.example.najdaapp.contact.ModifyContact;
-import com.example.najdaapp.emergency.DbHelperEmergency;
+import com.example.najdaapp.emergency.EmergencyFragment;
 import com.example.najdaapp.emergency.EmergencyModel;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -71,8 +67,7 @@ public class CustomAdapter extends BaseAdapter {
                 EmergencyModel contact_user=new EmergencyModel(phoneE ,nameE);
                 db.addEmergency(contact_user);
                 Toast.makeText(context, "set default"+arrayList.get(arrayList.keySet().toArray()[i]), Toast.LENGTH_SHORT).show();
-
-            }
+         }
 
         });
 

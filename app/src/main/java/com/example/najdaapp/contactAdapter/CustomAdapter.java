@@ -12,8 +12,8 @@ import android.widget.Toast;
 
 import com.example.najdaapp.DBSqLite.DatabaseHelper;
 import com.example.najdaapp.R;
+import com.example.najdaapp.contact.ContactManager;
 import com.example.najdaapp.contact.ContactModel;
-import com.example.najdaapp.contact.DbHelper;
 import com.example.najdaapp.contact.ModifyContact;
 
 import java.util.ArrayList;
@@ -81,10 +81,12 @@ public class CustomAdapter extends BaseAdapter {
 
                 ContactModel contactSelected =d.getContact(phone.getText().toString());
                 d.deleteContact(contactSelected);
+Intent i=new Intent(context, ContactManager.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
+context.startActivity(i);
                 Toast.makeText(context, "contact Deleted please refresh", Toast.LENGTH_SHORT).show();
-                notifyDataSetInvalidated();
-                notifyDataSetChanged();
+
 
 
             }

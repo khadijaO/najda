@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.VibrationEffect;
@@ -33,7 +32,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.OnTokenCanceledListener;
 import com.example.najdaapp.contact.ContactModel;
-import com.example.najdaapp.contact.DbHelper;
 import com.example.najdaapp.R;
 
 import java.util.List;
@@ -139,7 +137,7 @@ public class SensorService extends Service {
 //                                DatabaseHelper db = new DatabaseHelper(SensorService.this);
                                 List<ContactModel> list = db.getAllContacts();
                                 for (ContactModel c : list) {
-                                    String message = msg.getSalutation()+"    "+ c.getName() +"    "+ msg.getBody()+" \n " ;
+                                    String message = "I am in DANGER, i need help. Please urgently reach me out.\n" + "GPS was turned off.Couldn't find location. Call your nearest Police Station.";
 
                                     smsManager.sendTextMessage(c.getPhoneNo(), null, message, null, null);
                                 }
@@ -151,7 +149,7 @@ public class SensorService extends Service {
                             Log.d("Check: ", "OnFailure");
                             String message = "I am in DANGER, i need help. Please urgently reach me out.\n" + "GPS was turned off.Couldn't find location. Call your nearest Police Station.";
                             SmsManager smsManager = SmsManager.getDefault();
-                            DbHelper db = new DbHelper(SensorService.this);
+                            DatabaseHelper db = new DatabaseHelper(SensorService.this);
                             List<ContactModel> list = db.getAllContacts();
                             for (ContactModel c : list) {
                                 smsManager.sendTextMessage(c.getPhoneNo(), null, message, null, null);

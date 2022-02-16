@@ -6,13 +6,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
 import com.example.najdaapp.Message.MessageModule;
 import com.example.najdaapp.contact.ContactModel;
-import com.example.najdaapp.contact.DbHelper;
-import com.example.najdaapp.emergency.DbHelperEmergency;
 import com.example.najdaapp.emergency.EmergencyModel;
 
 import java.util.ArrayList;
@@ -88,10 +87,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String CREATE_EMERGENCY_TABLE = "CREATE TABLE " + TABLE_EMERGENCY_NAME + "("
                 + KEY_ID_E + " INTEGER PRIMARY KEY, "+ PH_E + " TEXT, "+ NAME_E + " TEXT)";
 //        Log.d("h i", CREATE_CONTACT_TABLE);
-
         sqLiteDatabase.execSQL(CREATE_EMERGENCY_TABLE);
-
-
 
         // create the table for the first time MESSAGE
         String CREATE_TABLE_M = "CREATE TABLE " + TABLE_NAME_MSG + "("
@@ -126,18 +122,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 //    EMERGENCUY_________________________________________________
 public EmergencyModel getEmergency(String phone) {
     SQLiteDatabase db = this.getReadableDatabase();
-
+    EmergencyModel emergency=null;
     Cursor cursor = db.query(TABLE_EMERGENCY_NAME, new String[] {
                     NAME_E,PH_E }, null,
             null, null, null, null,"1");
-    if (cursor != null)
+    if(cursor.getCount() <= 0) {
+        emergency = new EmergencyModel("119", "help me");
+
+    }
+
+    else{
         cursor.moveToFirst();
+        emergency = new EmergencyModel(cursor.getString(1),
+                cursor.getString(0));
+    }
 
-
-    EmergencyModel contact = new EmergencyModel(cursor.getString(1),
-            cursor.getString(0));
-    // return Emergency number
-    return contact;
+    return emergency;
 }
 
     public void addEmergency(EmergencyModel contact){
@@ -169,6 +169,8 @@ public EmergencyModel getEmergency(String phone) {
         Cursor cursor = db.query(TABLE_NAME_CONTACT, new String[] {
                         NAME,PH,RELATION  }, PH + "=?",
                 new String[] { id }, null, null, null, null);
+
+
         if (cursor != null)
             cursor.moveToFirst();
 
@@ -267,17 +269,23 @@ public void addMessageGPS(MessageModule messageModule){
 }
 
     public MessageModule getMessage(boolean GPS) {
+        MessageModule contact = null;
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_NAME_MSG,null, null,
                 null, null, null, null,"1");
-        if (cursor != null)
+
+        if(cursor.getCount() <= 0) {
+            contact = new MessageModule("hi", "help me", true,true);
+
+        }
+
+      else{
             cursor.moveToFirst();
-//    public MessageModule(String salutation, String body, boolean receiver, boolean gps) {
-//
+//    public MessageModule(String salutation, String body, boolean receiver, boolean gps) //
 
-        MessageModule contact = new MessageModule(cursor.getString(1),cursor.getString(2),Boolean.parseBoolean(cursor.getString(3)),Boolean.parseBoolean(cursor.getString(4)));
-
+            contact = new MessageModule(cursor.getString(1), cursor.getString(2), Boolean.parseBoolean(cursor.getString(3)), Boolean.parseBoolean(cursor.getString(4)));
+        }
         // return Emergency number
         return contact;
     }

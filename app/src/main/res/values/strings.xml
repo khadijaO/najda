@@ -105,12 +105,24 @@
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
 
-    <string name="menu_Emergency">Home</string>
+    <string name="menu_Emergency">Emergency Number</string>
     <string name="menu_contact">Gallery</string>
-    <string name="menu_message">Slideshow</string>
-    <string name="menu_Shake">Slideshow</string>
-    <string name="menu_fall">Slideshow</string>
-    <string name="menu_message_instant">Slideshow</string>
+    <string name="menu_message">Message</string>
+    <string name="menu_Shake">Shake</string>
+    <string name="menu_fall">Fall</string>
+    <string name="menu_message_instant">Speed message</string>
+    <string name="activate_shake">activate Shake service</string>
+    <string name="activate_fall">activate Fall service </string>
+    <string name="disactivate_shake">Inactivate Shake service</string>
+    <string name="disactivate_fall">Inactivate Fall service </string>
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!--                    -->
+
+<!--    SPEED MESSAGE-->
+    <string name="speedExpression">Send a speed emergency Message</string>
+
 </resources>

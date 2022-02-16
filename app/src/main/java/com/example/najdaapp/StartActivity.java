@@ -1,25 +1,15 @@
 package com.example.najdaapp;
 
-import static android.Manifest.permission.CALL_PHONE;
-
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.example.najdaapp.contact.ContactUser;
-
-import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 public class StartActivity extends AppCompatActivity {
 Button btn1,btn2;

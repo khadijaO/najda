@@ -14,25 +14,39 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.os.Vibrator;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
 
 import com.example.najdaapp.DBSqLite.DatabaseHelper;
+import com.example.najdaapp.Message.MessageModule;
 import com.example.najdaapp.R;
+import com.example.najdaapp.contact.ContactModel;
 import com.example.najdaapp.emergency.EmergencyModel;
+import com.example.najdaapp.serviceShake.SensorService;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.CancellationToken;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.OnTokenCanceledListener;
 
 import java.text.DecimalFormat;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -133,24 +147,120 @@ public class OnfallService extends Service implements SensorEventListener {
 //             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //            intent.setData(Uri.parse("119"));
 //            startActivity(intent);
-db=new DatabaseHelper(this);
-EmergencyModel r=db.getEmergency("");
-String tel=r.getPhoneNo();
+
+
+///send message
+            // create FusedLocationProviderClient to get the user location
+            FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(getApplicationContext());
+
+            // use the PRIORITY_BALANCED_POWER_ACCURACY
+            // so that the service doesn't use unnecessary power via GPS
+            // it will only use GPS at this very moment
+            fusedLocationClient.getCurrentLocation(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY, new CancellationToken() {
+                @Override
+                public boolean isCancellationRequested() {
+                    return false;
+                }
+
+                @NonNull
+                @Override
+                public CancellationToken onCanceledRequested(@NonNull OnTokenCanceledListener onTokenCanceledListener) {
+                    return null;
+                }
+            }).addOnSuccessListener(new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    Log.d("Check: ", "hiiiii");
+//                    Toast.makeText(getApplicationContext(), "Shake detected", Toast.LENGTH_SHORT).show();
+//                    Vibrator v = (Vibrator)getSystemService(OnfallService.VIBRATOR_SERVICE);
+//                    v.vibrate(1000);
+                    // check if location is null
+                    // for both the cases we will
+                    // create different messages
+                    if (location != null) {
+
+                        // get the SMSManager
+                        SmsManager smsManager = SmsManager.getDefault();
+
+                        // get the list of all the contacts in Database
+                        DatabaseHelper db = new DatabaseHelper(getApplicationContext());
+                        List<ContactModel> list = db.getAllContacts();
+                        MessageModule msg=db.getMessage(true);
+                        // send SMS to each contact
+                        for (ContactModel c : list) {
+                            String message = msg.getSalutation()+"    "+ c.getName() +"    "+ msg.getBody()+" \n " + "http://maps.google.com/?q=" + location.getLatitude() + "," + location.getLongitude();
+                            smsManager.sendTextMessage(c.getPhoneNo(), null, message, null, null);
+                        }
+                    } else {
+                        DatabaseHelper db = new DatabaseHelper(getApplicationContext());
+                        MessageModule msg=db.getMessage(true);
+
+//                                String message = "I am in DANGER, i need help. Please urgently reach me out.\n" + "GPS was turned off.Couldn't find location. Call your nearest Police Station.";
+                        SmsManager smsManager = SmsManager.getDefault();
+//                                DatabaseHelper db = new DatabaseHelper(SensorService.this);
+                        List<ContactModel> list = db.getAllContacts();
+                        for (ContactModel c : list) {
+                            String message = "I am in DANGER, i need help. Please urgently reach me out.\n" + "GPS was turned off.Couldn't find location. Call your nearest Police Station.";
+
+                            smsManager.sendTextMessage(c.getPhoneNo(), null, message, null, null);
+                        }
+                    }
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.d("Check: ", "OnFailure");
+                    String message = "I am in DANGER, i need help. Please urgently reach me out.\n" + "GPS was turned off.Couldn't find location. Call your nearest Police Station.";
+                    SmsManager smsManager = SmsManager.getDefault();
+                    DatabaseHelper db = new DatabaseHelper(getApplicationContext());
+                    List<ContactModel> list = db.getAllContacts();
+                    for (ContactModel c : list) {
+                        smsManager.sendTextMessage(c.getPhoneNo(), null, message, null, null);
+                    }
+                }
+            });
 
 
 
-//            Toast.makeText(getApplicationContext(), "phone = "+tel, Toast.LENGTH_SHORT).show();
+
+
+
+
+
+            db=new DatabaseHelper(this);
+            EmergencyModel r=db.getEmergency("");
+            String tel=r.getPhoneNo();
+
+            final Intent i = new Intent(Intent.ACTION_CALL);
+            i.setData(Uri.parse("tel:"+tel));
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             try{
-    Intent i = new Intent(Intent.ACTION_CALL);
-    i.setData(Uri.parse("tel:"+tel));
-                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        new CountDownTimer(5000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                Toast.makeText(getApplicationContext(), "seconds remaining: " + millisUntilFinished / 1000, Toast.LENGTH_SHORT).show();
+                Vibrator v = (Vibrator)getSystemService(OnfallService.VIBRATOR_SERVICE);
+                v.vibrate(1000);
+            }
+
+            public void onFinish() {
+                Toast.makeText(getApplicationContext(), "done", Toast.LENGTH_SHORT).show();
+            if(ContextCompat.checkSelfPermission(getApplicationContext(),CALL_PHONE)==PackageManager.PERMISSION_GRANTED){
+                startActivity(i);
+//                Toast.makeText(getApplicationContext(), "ymkn", Toast.LENGTH_SHORT).show();
+            }
+            else {
+//                Toast.makeText(getApplicationContext(), "ymknch", Toast.LENGTH_SHORT).show();
+
+            }
 
 
-    if (ContextCompat.checkSelfPermission(getApplicationContext(), CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
-        startActivity(i);
-    } else {
-//        requestPermissions(new String[]{CALL_PHONE}, 1);
-    }
+            }
+        }.start();
+
+
+
 }
 catch (Exception eh){
     Toast.makeText(this, "can't !!!!"+eh.getMessage(), Toast.LENGTH_LONG).show();

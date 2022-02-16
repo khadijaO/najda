@@ -4,18 +4,11 @@
     tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_home"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="@string/menu_home" />
-        <item
-            android:id="@+id/nav_emergency_number"
-            android:icon="@drawable/icon_call"
-            android:title="@string/menu_Emergency" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/menu_slideshow" />
+<!--        <item-->
+<!--            android:id="@+id/nav_home"-->
+<!--            android:icon="@drawable/icon_home"-->
+<!--            android:title="@string/menu_home" />-->
+
     </group>
     <group android:checkableBehavior="single" >
         <item android:id="@+id/nav_contact"
@@ -27,9 +20,9 @@
         <item android:id="@+id/nav_message"
             android:title="Message"
             android:icon="@drawable/icon_modify"></item>
-        <item android:id="@+id/nav_medias"
+        <item android:id="@+id/nav_shake"
             android:title="Shake service"
-            android:icon="@drawable/icon_medias"></item>
+            android:icon="@drawable/rate_us_icon"></item>
         <item android:id="@+id/nav_service"
             android:title="Fall service"
             android:icon="@drawable/rate_us_icon"></item>
@@ -37,35 +30,5 @@
     </group>
 
 
-    <item android:title="Profile">
 
-        <menu>
-            <group android:checkableBehavior="single">
-                <item android:id="@+id/nav_profile"
-                    android:title="Profile"
-                    android:icon="@drawable/icon_profile"></item>
-                <item
-                    android:id="@+id/nav_logout"
-                    android:icon="@drawable/icon_logout"
-                    android:title="LogOut">
-
-                </item>
-            </group></menu>
-    </item>
-
-    <item android:title="Autres">
-
-        <menu>
-            <group android:checkableBehavior="single">
-                <item android:id="@+id/nav_share"
-                    android:title="Share"
-                    android:icon="@drawable/share_icon"></item>
-                <item
-                    android:id="@+id/nav_rateUs"
-                    android:icon="@drawable/rate_us_icon"
-                    android:title="RateUs">
-
-                </item>
-            </group></menu>
-    </item>
 </menu>

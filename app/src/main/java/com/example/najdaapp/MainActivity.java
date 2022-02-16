@@ -15,6 +15,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.najdaapp.contact.ContactFragment_last;
+import com.example.najdaapp.contact.ContactUser;
+
 public class MainActivity extends AppCompatActivity {
     private LinearLayout dotsContainer;
     private ViewPager sliderViewPager;
@@ -41,7 +44,7 @@ private int numCurrentPage;
        start.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View view) {
-               Intent i=new Intent(getApplicationContext(),StartActivity.class);
+               Intent i=new Intent(getApplicationContext(), ContactUser.class);
                startActivity(i);
 
            }

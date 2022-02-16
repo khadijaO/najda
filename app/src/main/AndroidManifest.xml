@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.najdaapp" >
+    package="com.example.najdaapp">
 
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -30,30 +30,18 @@ This permission is necessary for devices
         android:label="@string/app_name"
         android:roundIcon="@mipmap/icon_najda"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".contact.ContactUser"
-            android:exported="false"
-            android:label="@string/title_activity_contact_user"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".StartActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivityFall"
+            android:name=".StartActivity"
             android:exported="false" />
 
         <service
             android:name=".serviceFall.OnfallService"
             android:enabled="true"
             android:exported="true" />
-
-        <activity
-            android:name=".Message.Message"
-            android:exported="false" />
-        <activity
-            android:name=".MainActivityShake"
-            android:exported="false" />
 
         <service
             android:name=".serviceShake.ReactivateService"
@@ -71,9 +59,6 @@ This permission is necessary for devices
             android:name=".emergency.ManageEmergency"
             android:exported="false" />
         <activity
-            android:name=".emergency.UserEmergency"
-            android:exported="false" />
-        <activity
             android:name=".contact.ModifyContact"
             android:exported="false" />
         <activity
@@ -82,12 +67,10 @@ This permission is necessary for devices
         <activity
             android:name=".contact.ContactManager"
             android:exported="false" />
-        <activity android:name=".contact.UserContact" />
         <activity android:name=".userProfile" />
         <activity android:name=".MainActivity" />
         <activity android:name=".LoginActivity" />
-        <activity android:name=".ProfilActivity" />
-        <activity android:name=".Splash_activity" >
+        <activity android:name=".Splash_activity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
